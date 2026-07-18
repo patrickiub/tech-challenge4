@@ -25,8 +25,11 @@ public class NotificacaoResource {
     public Response notificarPorId(@PathParam("id") UUID id) {
         return repository.buscarPorId(id)
             .map(avaliacao -> {
-                useCase.executar(avaliacao);
-                return Response.accepted().build();
+                boolean notificou = useCase.executar(avaliacao);
+                if (notificou) {
+                    return Response.accepted().build();
+                }
+                return Response.ok().build();
             })
             .orElse(Response.status(Response.Status.NOT_FOUND).build());
     }

@@ -17,11 +17,12 @@ public class NotificarUrgenciaUseCase {
         this.notificador = notificador;
     }
 
-    public void executar(Avaliacao avaliacao) {
+    public boolean executar(Avaliacao avaliacao) {
         if (avaliacao.getUrgencia() != Urgencia.CRITICA) {
             LOG.debugf("avaliação %s não é crítica, notificação ignorada", avaliacao.getId());
-            return;
+            return false;
         }
         notificador.notificar(avaliacao);
+        return true;
     }
 }
