@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @ApplicationScoped
+@io.quarkus.arc.lookup.LookupIfProperty(name = "app.repository.in-memory", stringValue = "true")
 public class InMemoryAvaliacaoRepository implements AvaliacaoRepository {
 
     private final Map<UUID, Avaliacao> storage = new ConcurrentHashMap<>();
