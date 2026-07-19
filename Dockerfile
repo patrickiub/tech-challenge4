@@ -1,32 +1,29 @@
 ####
 # Multi-stage Dockerfile for Quarkus JVM mode
-# Optimized for Google Cloud Run deployment
+# Optimized for Google Cloud Run deployment via Cloud Build
 ####
 
-# Build stage
-FROM eclipse-temurin:17-jdk AS build
+# Build stage - use official Maven image (Cloud Build has no BuildKit)
+FROM maven:3.9-eclipse-temurin-17 AS build
 
 WORKDIR /workspace
 
-# Copy Maven wrapper and pom first for layer caching
-COPY mvnw mvnw.cmd pom.xml ./
-COPY .mvn .mvn
-
-# Warm up dependency cache
-RUN --mount=type=cache,target=/root/.m2 ./mvnw dependency:go-offline -B || true
+# Copy pom first to leverage Docker layer cache for dependencies
+COPY pom.xml ./
+RUN mvn dependency:go-offline -B
 
 # Copy source and build
 COPY src src
-RUN --mount=type=cache,target=/root/.m2 ./mvnw package -DskipTests -B
+RUN mvn package -DskipTests -B
 
-# Runtime stage
+# Runtime stage - JRE only, smaller image
 FROM eclipse-temurin:17-jre
 
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 WORKDIR /deployments
 
-# Copy the Quarkus fast-jar output layers
+# Copy the Quarkus fast-jar output
 COPY --from=build /workspace/target/quarkus-app/lib/ /deployments/lib/
 COPY --from=build /workspace/target/quarkus-app/*.jar /deployments/
 COPY --from=build /workspace/target/quarkus-app/app/ /deployments/app/
