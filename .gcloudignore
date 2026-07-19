@@ -1,0 +1,27 @@
+# Build outputs
+target/
+*.class
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Local credentials - never send to cloud build
+*.json
+credentials/
+secrets/
+
+# Node/other tooling
+node_modules/
+
+# Logs
+*.log
