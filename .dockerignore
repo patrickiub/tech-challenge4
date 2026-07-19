@@ -1,5 +1,29 @@
-*
-!target/*-runner
-!target/*-runner.jar
-!target/lib/*
-!target/quarkus-app/*
+# Build outputs (we build from source in multi-stage docker)
+target/
+*.class
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Git
+.git/
+.gitignore
+
+# Credentials
+*.json
+credentials/
+secrets/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local ignore files (not needed inside container)
+.gcloudignore
+.dockerignore
+
+# Docs / non-runtime
+README.md
+*.md
