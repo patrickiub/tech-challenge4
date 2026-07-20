@@ -43,3 +43,18 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 # TLS Certificates
 .certs/
+
+# Postman collection with production URL - shared via other channels
+postman/
+
+# Delivery folder - contains sensitive data (real urls, credentials) not for public repo
+entrega/
+
+# Secrets folder (belt and suspenders - already excluded elsewhere)
+secrets/
+credentials/
+*.env
+.env.*
+
+# Environment variable exports
+*.env.local
